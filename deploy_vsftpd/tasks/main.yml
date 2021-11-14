@@ -1,0 +1,35 @@
+---
+# tasks file for deploy_vsftpd
+
+    - block: #Block for OS Family Redhat
+       - name: Install "{{ package }}"
+         yum:
+           name: "{{ package }}"
+           state: latest
+       - name: Install configuration file
+         template:
+              src:  vsftpd_config.j2
+              dest: "{{ config_path }}"
+              mode: '0600'
+         notify: Restart and Enable {{ package }}
+
+       - name: Open FTP Ports in Firewall for {{ package }}
+         firewalld:
+           port: "{{ item }}"
+           permanent: yes
+           state: enabled
+           immediate: yes
+         with_items:
+           - 20/tcp
+           - 21/tcp
+
+       - name: Set Selinux context
+         command: setsebool -P allow_ftpd_anon_write on
+
+       - name: Check status of {{ package }} service
+         service_facts:
+         register: service_state
+       - debug:
+           var: service_state.ansible_facts.services["{{ package }}.service"].state
+
+      when: ansible_facts['os_family'] == "RedHat"

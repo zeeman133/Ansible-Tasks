@@ -1,0 +1,33 @@
+---
+# tasks file for deploy_apache
+    - block: #Block for OS Family Redhat
+       - name: Install "{{ package }}"
+         yum:
+           name: "{{ package }}"
+           state: latest
+
+       - name: Creating a file with content
+         copy:
+           dest: "/var/www/html/index.html"
+           content: |
+             Welcome to my web server.
+         notify: Restart and Enable {{ package }}
+
+
+       - name: Open HTTP/HTTPS in Firewall for {{ package }}
+         firewalld:
+           port: "{{ item }}"
+           permanent: yes
+           state: enabled
+           immediate: yes
+         with_items:
+           - 80/tcp
+           - 443/tcp
+
+       - name: Check status of {{ package }} service
+         service_facts:
+         register: service_state
+       - debug:
+           var: service_state.ansible_facts.services["{{ package }}.service"].state
+
+      when: ansible_facts['os_family'] == "RedHat"

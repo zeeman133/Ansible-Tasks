@@ -1,0 +1,4 @@
+---
+# handlers file for deploy_apache
+   - name: Restart and Enable {{ package }}
+     service: name="{{ package }}" state=restarted enabled=yes

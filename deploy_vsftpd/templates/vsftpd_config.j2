@@ -1,0 +1,19 @@
+anonymous_enable={{ allow_anonymous }}
+local_enable=YES
+write_enable=YES
+local_umask=022
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+xferlog_std_format=YES
+listen=NO
+listen_ipv6=YES
+anon_root=/var/ftp/pub/upload
+anon_upload_enable={{ allow_anon_upload }}
+anon_mkdir_write_enable=YES
+
+pam_service_name=vsftpd
+userlist_enable=YES
+tcp_wrappers=YES
+
+

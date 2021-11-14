@@ -1,0 +1,7 @@
+---
+ - name: Install and Configure Web Server Apache
+   hosts: Linux
+   become: yes
+
+   roles:
+     - deploy_apache

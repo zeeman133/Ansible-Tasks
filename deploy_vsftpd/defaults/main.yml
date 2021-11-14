@@ -1,0 +1,6 @@
+---
+# defaults file for deploy_vsftpd
+    package: "vsftpd"
+    config_path: "/etc/vsftpd/vsftpd.conf"
+    allow_anonymous: "YES"
+    allow_anon_upload: "YES"

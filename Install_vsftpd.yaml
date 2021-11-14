@@ -1,0 +1,8 @@
+---
+ - name: Install and Configure Vsftpd
+   hosts: Linux
+   become: yes
+
+
+   roles:
+    - deploy_vsftpd
