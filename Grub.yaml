@@ -1,15 +1,28 @@
+
 ---
  - name: Modify Grub
    hosts: Linux
    become: yes
 
    tasks:
-   - name: Add Parameters to /etc/default/grub
+   - name: Add Parameter net.ifnames=0 to /etc/default/grub
      ansible.builtin.lineinfile:
       path: /etc/default/grub
       backrefs: yes
-      regexp: '^(GRUB_CMDLINE_LINUX=(?!.* audit)\"[^\"]+)(\".*)'
-      line: '\1 net.ifnames=0 biosdevname=0\2'
+      state: present
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.* net.ifnames=)\"[^\"]+)(\".*)'
+      line: '\1 net.ifnames=0\2'
+
+
+   - name: Add Parameter biosdevname=0 to /etc/default/grub
+     ansible.builtin.lineinfile:
+      path: /etc/default/grub
+      backrefs: yes
+      state: present
+      regexp: '^(GRUB_CMDLINE_LINUX=(?!.* biosdevname=)\"[^\"]+)(\".*)'
+      line: '\1 biosdevname=0\2'
+
 
    - name: Execute Grub2-mkconfig
-     ansible.builtin.command: /usr/sbin/grub2-mkconfig 
+     ansible.builtin.command: /usr/sbin/grub2-mkconfig
+
